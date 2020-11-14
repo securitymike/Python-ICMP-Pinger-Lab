@@ -50,7 +50,14 @@ def receiveOnePing(mySocket, ID, timeout, destAddr):
         # Fill in start
 
         # Fetch the ICMP header from the IP packet
-
+        ICMPHeader = recPacket[20:28]
+        Type, Code, Checksum, packetID, Sequence = struct.unpack('bbHHh', ICMPHeader)
+        if packetID == ID:
+            BytesInDouble = struct.calcsize('d')
+            timeSent = struct.unpack('d',recPacket[28:28 + BytesInDouble])[0]
+            return timeReceived - timeSent
+        else:
+            return 'Wrong ID'
         # Fill in end
         timeLeft = timeLeft - howLongInSelect
         if timeLeft <= 0:
@@ -106,14 +113,19 @@ def ping(host, timeout=1):
     print("Pinging " + dest + " using Python:")
     print("")
     # Calculate vars values and return them
-    #  vars = [str(round(packet_min, 2)), str(round(packet_avg, 2)), str(round(packet_max, 2)),str(round(stdev(stdev_var), 2))]
+    #packet_min = 
+    #packet_avg = 
+    #packet_max = 
+    #stdev = 
+    #stdev_var = 
+    #vars = [str(round(packet_min, 2)), str(round(packet_avg, 2)), str(round(packet_max, 2)),str(round(stdev(stdev_var), 2))]
     # Send ping requests to a server separated by approximately one second
     for i in range(0,4):
         delay = doOnePing(dest, timeout)
-        print(delay)
+        print("Reply from: " + dest + " " + str(delay) +" ms") 
         time.sleep(1)  # one second
 
-    return vars
+    #return vars
 
 if __name__ == '__main__':
-    ping("google.co.il")
+    ping("bokeh.nyc")
