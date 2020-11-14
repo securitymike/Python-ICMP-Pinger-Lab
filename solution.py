@@ -122,16 +122,17 @@ def ping(host, timeout=1):
         delay = doOnePing(dest, timeout)
         print("Reply from: " + dest + " Time: " + str(round(delay, 2)) +" ms") 
         time.sleep(1)  # one second
-        ttl.append(round(delay,2))
+     #   ttl.append(round(delay,2))
+        ttl.append(delay)
     print("")
     print("Ping statistics for " + dest + ":")
     packet_min = min(ttl)
     packet_max = max(ttl)
     packet_avg = (sum(ttl))/4
     stdev_var = statistics.stdev(ttl)
-    print("('" + str(packet_min) + "','" + str(packet_max) + "','" + str(packet_avg) + "','" + str(stdev_var) + "')")
+    print("('" + str(round(packet_min, 2)) + "','" + str(round(packet_max,2)) + "','" + str(round(packet_avg, 2)) + "','" + str(round(stdev_var,2)) + "')")
 
-    vars = [str(packet_min), str(packet_avg), str(packet_max),str(stdev_var)]
+    vars = [str(round(packet_min,2)), str(round(packet_avg,2)), str(round(packet_max, 2)),str(round(stdev_var, 2))]
 
     return vars
 
