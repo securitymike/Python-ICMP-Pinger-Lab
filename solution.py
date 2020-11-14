@@ -56,10 +56,9 @@ def receiveOnePing(mySocket, ID, timeout, destAddr):
         if packetID == ID:
             BytesInDouble = struct.calcsize('d')
             timeSent = struct.unpack('d',recPacket[28:28 + BytesInDouble])[0]
-            #ttl=[]
             return timeReceived - timeSent
         else:
-            return 'Wrong ID'
+            return ['0', '0.0', '0', '0.0']
         # Fill in end
         timeLeft = timeLeft - howLongInSelect
         if timeLeft <= 0:
@@ -120,22 +119,22 @@ def ping(host, timeout=1):
     ttl=[]
     for i in range(0,4):
         delay = doOnePing(dest, timeout)
-        print("Reply from: " + dest + " Time: " + str(round(delay, 2)) +" ms") 
+        print("Reply from: " + dest + " Time: " + str(round(delay, 2)*1000) +" ms") 
         time.sleep(1)  # one second
      #   ttl.append(round(delay,2))
         ttl.append(delay)
     print("")
     print("Ping statistics for " + dest + ":")
-    packet_min = min(ttl)
-    packet_max = max(ttl)
-    packet_avg = (sum(ttl))/4
-    stdev_var = stdev(ttl)
+    packet_min = (min(ttl))*1000
+    packet_max = (max(ttl))*1000
+    packet_avg = ((sum(ttl))/4)*1000
+    stdev_var = (statistics.stdev(ttl))*1000
     print("('" + str(round(packet_min, 2)) + "','" + str(round(packet_max,2)) + "','" + str(round(packet_avg, 2)) + "','" + str(round(stdev_var,2)) + "')")
 
-    #vars = [str(round(packet_min,2)), str(round(packet_avg,2)), str(round(packet_max, 2)),str(round(stdev_var, 2))]
-    vars = [str(round(packet_min, 2)), str(round(packet_avg, 2)), str(round(packet_max, 2)),str(round(stdev(stdev_var), 2))]
+    vars = [str(round(packet_min,2)), str(round(packet_avg,2)), str(round(packet_max, 2)),str(round(stdev_var, 2))]
+    #vars = [str(round(packet_min, 2)), str(round(packet_avg, 2)), str(round(packet_max, 2)),str(round(stdev(stdev_var), 2))]
 
     return vars
 
 if __name__ == '__main__':
-   ping("google.co.il")
+   ping("google.com")
