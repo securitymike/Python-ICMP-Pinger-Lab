@@ -127,11 +127,13 @@ def ping(host, timeout=1):
     print("Ping statistics for " + dest + ":")
     packet_min = min(ttl)
     packet_max = max(ttl)
-    stdev_var = statistics.stdev(ttl)
     packet_avg = (sum(ttl))/4
-    print(str(packet_min) + str(packet_max) + str(packet_avg) + str(stdev_var))
-    #vars = [str(round(packet_min, 2)), str(round(packet_avg, 2)), str(round(packet_max, 2)),str(round(statistics.stdev(stdev_var), 2))]
-    #return vars
+    stdev_var = statistics.stdev(ttl)
+    print("('" + str(packet_min) + "','" + str(packet_max) + "','" + str(packet_avg) + "','" + str(stdev_var) + "')")
+
+    vars = [str(packet_min), str(packet_avg), str(packet_max),str(stdev_var)]
+
+    return vars
 
 if __name__ == '__main__':
    ping("google.co.il")
