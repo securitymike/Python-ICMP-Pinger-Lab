@@ -5,6 +5,7 @@ import struct
 import time
 import select
 import binascii
+import statistics
 # Should use stdev
 
 ICMP_ECHO_REQUEST = 8
@@ -55,6 +56,7 @@ def receiveOnePing(mySocket, ID, timeout, destAddr):
         if packetID == ID:
             BytesInDouble = struct.calcsize('d')
             timeSent = struct.unpack('d',recPacket[28:28 + BytesInDouble])[0]
+            #ttl=[]
             return timeReceived - timeSent
         else:
             return 'Wrong ID'
@@ -113,20 +115,23 @@ def ping(host, timeout=1):
     print("Pinging " + dest + " using Python:")
     print("")
     # Calculate vars values and return them
-    #packet_min = 
-    #packet_avg = 
-    #packet_max =  
-    #stdev = 
-    #stdev_var = 
-    #vars = [str(round(packet_min, 2)), str(round(packet_avg, 2)), str(round(packet_max, 2)),str(round(stdev(stdev_var), 2))]
+
     # Send ping requests to a server separated by approximately one second
+    ttl=[]
     for i in range(0,4):
         delay = doOnePing(dest, timeout)
         print("Reply from: " + dest + " Time: " + str(round(delay, 2)) +" ms") 
         time.sleep(1)  # one second
+        ttl.append(round(delay,2))
     print("")
     print("Ping statistics for " + dest + ":")
-    return vars
+    packet_min = min(ttl)
+    packet_max = max(ttl)
+    stdev_var = statistics.stdev(ttl)
+    packet_avg = (sum(ttl))/4
+    print(str(packet_min) + str(packet_max) + str(packet_avg) + str(stdev_var))
+    #vars = [str(round(packet_min, 2)), str(round(packet_avg, 2)), str(round(packet_max, 2)),str(round(statistics.stdev(stdev_var), 2))]
+    #return vars
 
 if __name__ == '__main__':
-    ping("bokeh.nyc")
+   ping("google.co.il")
